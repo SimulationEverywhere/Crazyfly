@@ -6,6 +6,7 @@
 # Put your personal build config in tools/make/config.mk and DO NOT COMMIT IT!
 # Make a copy of tools/make/config.mk.example to get you started
 -include tools/make/config.mk
+-include boost_reference.mk
 
 CFLAGS += $(EXTRA_CFLAGS)
 
@@ -234,9 +235,8 @@ INCLUDES += -Isrc/config -Isrc/hal/interface -Isrc/modules/interface
 INCLUDES += -Isrc/utils/interface -Isrc/drivers/interface -Isrc/platform
 INCLUDES += -Ivendor/CMSIS/CMSIS/Include -Isrc/drivers/bosch/interface
 
-###### Added for PDEVS-crazyflie-firmware ######
-INCLUDES += -I../boost_1_57_0
-INCLUDES += -I$(LIB)  # including ecdboost
+INCLUDES += -I$(BOOST_LIB_DIR)
+INCLUDES += -I$(LIB)  # including ECDBoost library
 INCLUDES += -I$(LIB)/ecdboost/utilities  # including ecdboost utilities
 INCLUDES += -I$(PDEVS_MODEL_DIR)
 
@@ -361,7 +361,7 @@ endif
 #################### Targets ###############################
 
 
-all: check_submodules build
+all: check_dependencies build
 build: clean_version compile print_version size
 compile: clean_version $(PROG).hex $(PROG).bin $(PROG).dfu
 
@@ -427,6 +427,11 @@ erase:
 #Print preprocessor #defines
 prep:
 	@$(CC) $(CFLAGS) -dM -E - < /dev/null
+
+check_dependencies: check_submodules
+ifeq (,$(wildcard boost_reference.mk))
+	$(error The reference to the boost library is needed. Create it following the instructions in README.md)
+endif
 
 check_submodules:
 	@$(PYTHON2) tools/make/check-for-submodules.py

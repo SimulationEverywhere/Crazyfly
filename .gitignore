@@ -17,3 +17,6 @@ tags
 *.gch
 
 /generated-test/**
+
+boost_reference.mk
+

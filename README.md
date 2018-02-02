@@ -2,12 +2,68 @@
 
 This project contains the source code for a PDEVS based Crazyflie 2.0 firmware.
 
+The ECDBoost implementation of PDEVS formalism can be found at [https://github.com/simulationeverywhere/ecdboost](https://github.com/simulationeverywhere/ecdboost).
+
 Due to some complications the original firmware has not been forked, but copied from the original [Bitcraze GitHub repository](https://github.com/bitcraze/crazyflie-firmware).
 For reference, the hash of the latest commit at that time was `06e8f8f6e9eb0413dcc23fafb0c23659d964c0c6`.
 
-## Usage
+## Dependencies
 
-For cloning, building and flashing look below at the original Bitcraze README.
+### Boost library
+
+ECDBoost has the [Boost C++ Library](http://www.boost.org/) as a dependency.
+You need to install it on your computer and then tell `g++` where to look for it.
+
+To do this, after installation create a file called `boost_reference.mk` with the following content
+```
+BOOST_LIB_DIR = <path_to_boost_library>
+```
+
+For example
+```
+BOOST_LIB_DIR = ../boost_1_57_0
+```
+
+### Toolchain
+
+The compilation uses `gcc-arm-none-eabi`.
+Below you can find instructions for installation of this package or for usage of a virtual machine.
+
+### Cloning
+
+This repository uses git submodulesi, in particular one of which is ECDBoost.
+Clone with the --recursive flag
+
+```bash
+git clone --recursive https://github.com/bitcraze/crazyflie-firmware.git
+```
+
+If you already have cloned the repo, use
+
+```bash
+git submodule init
+git submodule update
+```
+
+### Compilation and flashing into the quadcopter
+
+If needed
+```bash
+make clean
+```
+
+Compile with
+```bash
+make
+```
+
+Connect the Crazyradio and set the quadcopter in bootloader mode.  
+Flash binaries with
+```bash
+make cload
+```
+
+More details can be found below and in the crazyflie documentation.
 
 ## Possible future steps
 
@@ -91,22 +147,6 @@ source ~/.bashrc
 ```
 
 Verify the toolchain installation with `arm-none-eabi-gcc --version`
-
-### Cloning
-
-This repository uses git submodules. Clone with the --recursive flag
-
-```bash
-git clone --recursive https://github.com/bitcraze/crazyflie-firmware.git
-```
-
-If you already have cloned the repo, use
-
-```bash
-git submodule init
-git submodule update
-```
-
 
 ## Compiling
 
