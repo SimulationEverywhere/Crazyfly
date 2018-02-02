@@ -1,3 +1,28 @@
+# DEVS-Crazyflie-firmware
+
+This project contains the source code for a PDEVS based Crazyflie 2.0 firmware.
+
+Due to some complications the original firmware has not been forked, but copied from the original [Bitcraze GitHub repository](https://github.com/bitcraze/crazyflie-firmware).
+For reference, the hash of the latest commit at that time was `06e8f8f6e9eb0413dcc23fafb0c23659d964c0c6`.
+
+## Usage
+
+For cloning, building and flashing look below at the original Bitcraze README.
+
+## Possible future steps
+
+- Understand and merge previous PDEVS model of the crazyflie
+- Understand how to use ECDBoost to simulate the model
+- Implement the model ports' pDrive function
+
+## Modified Makefile
+
+The original makefile hase been modified to enable C++ support and to include PDEVS and ECDBoost.
+
+# Original Crazyflie README 
+
+The original documentation has been kept almost intact since it might be useful.
+
 # Crazyflie 2.0 Firmware  [![Build Status](https://api.travis-ci.org/bitcraze/crazyflie-firmware.svg)](https://travis-ci.org/bitcraze/crazyflie-firmware)
 
 This project contains the source code for the Crazyflie 2.0 firmware.
