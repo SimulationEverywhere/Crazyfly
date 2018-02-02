@@ -30,7 +30,7 @@ public:
      */
     explicit MotionSensorPort(const std::string &n = "port_motion_sensor", const TIME &polling = TIME(0, 0, 1, 0)) noexcept
                     : port<TIME, MSG>(n,polling)
-	{        setLed_1();}
+	{ }
 
     void print() noexcept {}
     bool pDriver(Value &v) const noexcept;
@@ -51,7 +51,7 @@ public:
      */
     explicit CmdInputPort(const std::string &n = "port_cmd_input", const TIME &polling = TIME(0, 0, 1, 0)) noexcept
                     : port<TIME, MSG>(n,polling)
-	{        setLed_2();}
+	{ }
 
     void print() noexcept {}
     bool pDriver(Value &v) const noexcept;

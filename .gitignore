@@ -20,3 +20,5 @@ tags
 
 boost_reference.mk
 
+*.swp
+

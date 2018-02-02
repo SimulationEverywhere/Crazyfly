@@ -10,22 +10,19 @@
 
 #ifndef MOTOR_MASTER_H
 #define MOTOR_MASTER_H
+
 #include <assert.h>
 #include <memory>
-#include <boost/simulation/pdevs/atomic.hpp>
+#include <ecdboost/simulation.hpp>
 
 #include "eMessage_s.hpp"
 
-using namespace boost::simulation::pdevs;
-using namespace boost::simulation;
 using namespace std;
+using namespace ecdboost;
+using namespace ecdboost::simulation;
+using namespace ecdboost::simulation::pdevs;
 
 #define MINIMUM_TIME_FOR_SWITCH TIME(00,00,0,00,100) //BRITime();
-
-/**
- * @class motorMaster
- */
-
 template<class TIME, class MSG>
 class MotorDEVS: public pdevs::atomic<TIME, MSG> {
 private:
@@ -98,15 +95,7 @@ public:
     void external(const std::vector<MSG>& mb, const TIME& t) noexcept {
 
         assert((mb.size() == 1)); // Wrong message bag size. Should be one.
-//        assert((mb.front().payload.getType() == DataType::MOTOR_INPUT)); // Wrong message type.
-
-//        const int* payload = static_cast<const int*>(&mb.front().val);
         uint32_t value = mb.front().val;
-
-//        if(value == 10)
-//            setLed_Amb();
-//        else
-//        	setLed_Police();
 
         thrust_m1 = value;
         thrust_m2 = value;
@@ -123,7 +112,6 @@ public:
     virtual void confluence(const std::vector<MSG>& mb, const TIME& t)
             noexcept {
     	internal();
-//        assert(false && "Non posible confluence function in this model");
     }
 
     void print() noexcept {}
