@@ -1,4 +1,4 @@
-# DEVS-Crazyflie-firmware
+# PDEVS-Crazyflie-firmware
 
 This project contains the source code for a PDEVS based Crazyflie 2.0 firmware.
 
@@ -14,7 +14,7 @@ For reference, the hash of the latest commit at that time was `06e8f8f6e9eb0413d
 ECDBoost has the [Boost C++ Library](http://www.boost.org/) as a dependency.
 You need to install it on your computer and then tell `g++` where to look for it.
 
-To do this, after installation create a file called `boost_reference.mk` with the following content
+To do this, after installation create a file called `boost_reference.mk` (in the root of the project) with the following content
 ```
 BOOST_LIB_DIR = <path_to_boost_library>
 ```
@@ -31,7 +31,7 @@ Below you can find instructions for installation of this package or for usage of
 
 ### Cloning
 
-This repository uses git submodulesi, in particular one of which is ECDBoost.
+This repository uses git submodules, in particular one of which is ECDBoost.
 Clone with the --recursive flag
 
 ```bash
