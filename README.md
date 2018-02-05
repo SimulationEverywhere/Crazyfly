@@ -35,7 +35,7 @@ This repository uses git submodules, in particular one of which is ECDBoost.
 Clone with the --recursive flag
 
 ```bash
-git clone --recursive https://github.com/bitcraze/crazyflie-firmware.git
+git clone --recursive https://github.com/SimulationEverywhere/PDEVS-crazyflie-firmware
 ```
 
 If you already have cloned the repo, use
