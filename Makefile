@@ -212,7 +212,7 @@ PROJ_OBJ_CF2 += libarm_math.a
 ###### Added for PDEVS-crazyflie-firmware ######
 PDEVS_RELATED_OBJ = pdevs_utils.o eTime.o hwTime.o
 
-OBJ = $(FREERTOS_OBJ) $(PORT_OBJ) $(ST_OBJ) $(PROJ_OBJ) $(PDEVS_RELATED_OBJ )
+OBJ = $(FREERTOS_OBJ) $(PORT_OBJ) $(ST_OBJ) $(PROJ_OBJ) $(PDEVS_RELATED_OBJ)
 ifeq ($(PLATFORM), CF2)
 OBJ += $(CRT0_CF2) $(ST_OBJ_CF2) $(FATFS_OBJ) $(PROJ_OBJ_CF2)
 endif

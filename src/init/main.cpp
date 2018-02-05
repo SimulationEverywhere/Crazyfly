@@ -9,14 +9,15 @@
 #include <limits>
 #include <boost/algorithm/string.hpp>
 
-//#include <thread>
-//#include <chrono>
+// Crazyflie drivers
+extern "C" {
+    #include <led.h>
+}
 
+// PDEVS
 #include <ecdboost/simulation.hpp>
-
 #include "eTime.h"
 #include "eMessage_s.hpp"
-
 #include "atomic_models/motor.hpp"
 #include "ports/ports_impl.hpp"
 
@@ -45,6 +46,7 @@ void setLed_Amb();
 
 
 int main(){
+    /*
     setLed_1();
 
     // Atomic models definition
@@ -80,7 +82,10 @@ int main(){
 
     setLed_OFF();
 
-    //std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    */
+
+    ledInit();
+    ledTest();
 
     return 0;
 }
