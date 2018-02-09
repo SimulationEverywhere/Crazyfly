@@ -10,11 +10,12 @@ For reference, the hash of the latest commit at that time was `06e8f8f6e9eb0413d
 ## Folders description
 
 The original project has been modified in the following way:
--`Makefile`: Modified to enable C++ code.
--`src/init/main.cpp`: Replaced the original `main.c`.
--`src/pdevs_model/`: Contains the PDEVS model (atomic components, ports, etc.).
--`src/lib/ecdboost/`: Contains the ECDBoost library (which is itself a git submodule).
--`docs/`: Contains some relevant documentation and old material.
+
+- `Makefile`: Modified to enable C++ code.
+- `src/init/main.cpp`: Replaced the original `main.c`.
+- `src/pdevs_model/`: Contains the PDEVS model (atomic components, ports, etc.).
+- `src/lib/ecdboost/`: Contains the ECDBoost library (which is itself a git submodule).
+- `docs/`: Contains some relevant documentation and old material.
 
 ## Dependencies
 
