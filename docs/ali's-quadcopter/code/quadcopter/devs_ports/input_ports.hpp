@@ -23,16 +23,14 @@ template<class TIME, class MSG>
 class MotionSensorPort: public port<TIME, MSG> {
 
 public:
-
-//    using Value = Datagram;
-	using Value = int;
+    using Value = int;
 
     /**
      * @brief startbtn constructor.
      */
     explicit MotionSensorPort(const std::string &n = "port_motion_sensor", const TIME &polling = TIME(0, 0, 1, 0)) noexcept
-                    : port<TIME, MSG>(n,polling)
-	{        setLed_1();}
+                    : port<TIME, MSG>(n,polling) {}
+
 
     void print() noexcept {}
     bool pDriver(Value &v) const noexcept;
@@ -44,16 +42,13 @@ template<class TIME, class MSG>
 class CmdInputPort: public port<TIME, MSG> {
 
 public:
-
-//    using Value = Datagram;
-	using Value = int;
+    using Value = int;
 
     /**
      * @brief startbtn constructor.
      */
     explicit CmdInputPort(const std::string &n = "port_cmd_input", const TIME &polling = TIME(0, 0, 1, 0)) noexcept
-                    : port<TIME, MSG>(n,polling)
-	{        setLed_2();}
+                    : port<TIME, MSG>(n,polling) {}
 
     void print() noexcept {}
     bool pDriver(Value &v) const noexcept;

@@ -1,31 +1,14 @@
-//--------------- DEVS MAIN CODE -------------------
-
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <chrono>
-#include <assert.h>
-#include <algorithm>
-#include <limits>
-#include <boost/algorithm/string.hpp>
-
-// Crazyflie drivers
-extern "C" {
-    #include <led.h>
-}
-
 // PDEVS
-#include <ecdboost/simulation.hpp>
-#include "eTime.h"
-#include "eMessage_s.hpp"
-#include "atomic_models/motor.hpp"
-#include "ports/ports_impl.hpp"
+ #include <ecdboost/simulation.hpp>
+ #include "eTime.h"
+ #include "eMessage_s.hpp"
+ #include "atomic_models/motor.hpp"
+ #include "ports/ports_impl.hpp"
 
-using namespace std;
-using namespace ecdboost::simulation;
-using namespace ecdboost::simulation::pdevs;
-using namespace ecdboost::simulation::pdevs::basic_models;
-
+ using namespace std;
+ using namespace ecdboost::simulation;
+ using namespace ecdboost::simulation::pdevs;
+ using namespace ecdboost::simulation::pdevs::basic_models;
 
 extern "C" {
 void setLed_1();
@@ -40,25 +23,23 @@ void setLed_9();
 void setLed_10();
 void setLed_11();
 
+void time_loop();
+
 void setLed_Police();
 void setLed_Amb();
 }
 
-
 int main(){
-    /*
     setLed_1();
+    time_loop();
 
     // Atomic models definition
-    //	printf("Creating atomic models ... \n");
     auto motorDEVS = make_atomic_ptr<MotorDEVS<Time, Message>>();
 
     //Coupled model definition
-    //	printf("Creating Coupled models ... \n");
     shared_ptr<flattened_coupled<Time, Message>> ControlUnit( new flattened_coupled<Time, Message>{{motorDEVS}, {motorDEVS}, {}, {motorDEVS}});
 
     //Top I/O port definition
-    //	printf("Defining top I/O ports ... \n");
     // Input ports
     //	auto sensor_in = make_port_ptr< MotionSensorPort<Time, Message>, const string &, const Time & >("port_motion_sensor", Time(0,0,1,0));
     auto cmd_in = make_port_ptr< CmdInputPort<Time, Message>, const string &, const Time & >("port_cmd_input", Time(0,0,0,200));
@@ -69,23 +50,24 @@ int main(){
     auto motor_3 = make_port_ptr<MotorPort<Time, Message>, const int&, const string &>(2, "port_motor3");
     auto motor_4 = make_port_ptr<MotorPort<Time, Message>, const int&, const string &>(3, "port_motor4");
 
-    setLed_4();
+    setLed_2();
+    time_loop();
 
     // Execution parameter definition
-    //	printf("Preparing runner \n");
     Time initial_time{Time::currentTime()};
     erunner<Time, Message> root{ControlUnit, {{cmd_in,motorDEVS}} , {{motor_1,motorDEVS}, {motor_2,motorDEVS}, {motor_3,motorDEVS}, {motor_4,motorDEVS}} };
     Time end_time{Time(0,0,2,500)};
 
-    //	printf(("Starting simulation until time: seconds " + end_time.asString() + "\n").c_str());
     end_time = root.runUntil(end_time);
 
-    setLed_OFF();
-
-    */
-
-    ledInit();
-    ledTest();
+    setLed_8();
+    time_loop();
+    while (true) {
+        setLed_2();
+        time_loop();
+        setLed_1();
+        time_loop();
+    }
 
     return 0;
 }

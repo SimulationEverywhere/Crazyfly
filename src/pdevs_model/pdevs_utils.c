@@ -8,13 +8,7 @@ int values[] = {37000, 43000, 45000, 43000, 45000, 43000, 37000};
 
 void time_loop() {
     int i = 0;
-    int j = 0;
-
-    while (j < 100) {
-      if (i == 65000) {
-    	i = 0;
-    	j++;
-      }
+    while (i < 10000000) {
       i++;
     }
 }
@@ -28,7 +22,7 @@ void setLed_1() {
     ledSet(LED_GREEN_L, 0);
     ledSet(LED_GREEN_R, 1);
 
-    time_loop();
+    /*time_loop();*/
 }
 
 void setLed_2() {
@@ -40,7 +34,7 @@ void setLed_2() {
     ledSet(LED_GREEN_L, 1);
     ledSet(LED_GREEN_R, 0);
 
-    time_loop();
+    /*time_loop();*/
 }
 
 void setLed_3() {
@@ -112,7 +106,7 @@ void setLed_8() {
     ledSet(LED_GREEN_L, 0);
     ledSet(LED_GREEN_R, 0);
 
-    time_loop();
+    /*time_loop();*/
 }
 
 void setLed_9() {

@@ -15,7 +15,7 @@
 #include <memory>
 #include <ecdboost/simulation.hpp>
 
-#include "eMessage_s.hpp"
+//#include "eMessage_s.hpp"
 
 using namespace std;
 using namespace ecdboost;
@@ -51,8 +51,7 @@ public:
      */
 
     void internal() noexcept {
-
-        //do nothing
+        // Do nothing
         next_internal = Time(00,00,00,250);
     }
 
@@ -86,12 +85,6 @@ public:
         return output;
     }
 
-    /**
-     * Decides to which model the message has to be foreward changing the message type.
-     * @param  - a message with the following structure
-     * {DataType::MotorInput,accx,accy,accz,gyrox, gyroy, gyroz}
-     */
-
     void external(const std::vector<MSG>& mb, const TIME& t) noexcept {
 
         assert((mb.size() == 1)); // Wrong message bag size. Should be one.
@@ -105,13 +98,8 @@ public:
         next_internal = Time::Zero; //MINIMUM_TIME_FOR_SWITCH; //Advance time of the model;
     }
 
-    /**
-     * There is not possible confluence in the model design.
-     */
-
-    virtual void confluence(const std::vector<MSG>& mb, const TIME& t)
-            noexcept {
-    	internal();
+    virtual void confluence(const std::vector<MSG>& mb, const TIME& t) noexcept {
+        internal();
     }
 
     void print() noexcept {}

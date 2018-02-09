@@ -15,23 +15,16 @@ using namespace ecdboost::simulation;
 using namespace ecdboost::simulation::pdevs;
 
 extern "C" {
-void motorsInit();
+    //void motorsInit();
+    void powerDistributionInit();
 }
-
-enum MotorEnum {
-    MOTOR_1, MOTOR_2, MOTOR_3, MOTOR_4
-};
-
-//std::vector<std::string> MotorPortName { "port_motor1", "port_motor2", "port_motor3", "port_motor4" };
-
 
 template<class TIME, class MSG>
 class MotorPort: public port<TIME, MSG> {
 
 public:
 
-//    using Value = Datagram;
-	using Value = int;
+    using Value = int;
 
     int motor_num;
 
@@ -40,14 +33,13 @@ public:
      *
      * @param n name assigned to the port
      */
-//    explicit MotorPort(const int & _motor_num) noexcept
-//            : port<TIME, MSG>(MotorPortName.at(_motor_num)),
-//              motor_num(_motor_num)
-	explicit MotorPort(const int& _motor_num, const std::string &n) noexcept
-			: port<TIME, MSG>(n), motor_num(_motor_num)
-    {  }
+    explicit MotorPort(const int& _motor_num, const std::string &n) noexcept
+        : port<TIME, MSG>(n), motor_num(_motor_num) {
+        // motorsInit();
+        powerDistributionInit();
+    }
 
-    void print() noexcept {} //printf("MOTOR 1 \n");
+    void print() noexcept {}
     bool pDriver(Value &v) const noexcept;
 };
 

@@ -7,6 +7,15 @@ The ECDBoost implementation of PDEVS formalism can be found at [https://github.c
 Due to some complications the original firmware has not been forked, but copied from the original [Bitcraze GitHub repository](https://github.com/bitcraze/crazyflie-firmware).
 For reference, the hash of the latest commit at that time was `06e8f8f6e9eb0413dcc23fafb0c23659d964c0c6`.
 
+## Folders description
+
+The original project has been modified in the following way:
+-`Makefile`: Modified to enable C++ code.
+-`src/init/main.cpp`: Replaced the original `main.c`.
+-`src/pdevs_model/`: Contains the PDEVS model (atomic components, ports, etc.).
+-`src/lib/ecdboost/`: Contains the ECDBoost library (which is itself a git submodule).
+-`docs/`: Contains some relevant documentation and old material.
+
 ## Dependencies
 
 ### Boost library
@@ -27,19 +36,17 @@ BOOST_LIB_DIR = ../boost_1_57_0
 ### Toolchain
 
 The compilation uses `gcc-arm-none-eabi`.
-Below you can find instructions for installation of this package or for usage of a virtual machine.
+Below you can find instructions for installation of this package or for usage of a virtual machine that already has the needed packages.
 
 ### Cloning
 
-This repository uses git submodules, in particular one of which is ECDBoost.
-Clone with the --recursive flag
-
+This repository uses git submodules, in particular one of which is ECDBoost.  
+Clone with the `--recursive` flag:
 ```bash
 git clone --recursive https://github.com/SimulationEverywhere/PDEVS-crazyflie-firmware
 ```
 
-If you already have cloned the repo, use
-
+If you already have cloned the repo, use:
 ```bash
 git submodule init
 git submodule update
@@ -47,18 +54,19 @@ git submodule update
 
 ### Compilation and flashing into the quadcopter
 
-If needed
+If needed:
 ```bash
 make clean
 ```
 
-Compile with
+Compile with:
 ```bash
 make
 ```
 
-Connect the Crazyradio and set the quadcopter in bootloader mode.  
-Flash binaries with
+Connect the Crazyradio.  
+Set the quadcopter in bootloader mode.  
+Flash binaries with:
 ```bash
 make cload
 ```

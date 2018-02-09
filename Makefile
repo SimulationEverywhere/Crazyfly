@@ -209,8 +209,7 @@ PROJ_OBJ_CF2 += sleepus.o
 # Libs
 PROJ_OBJ_CF2 += libarm_math.a
 
-###### Added for PDEVS-crazyflie-firmware ######
-PDEVS_RELATED_OBJ = pdevs_utils.o eTime.o hwTime.o
+PDEVS_RELATED_OBJ = pdevs_utils.o eTime.o hwTime.o  # PDEVS object files
 
 OBJ = $(FREERTOS_OBJ) $(PORT_OBJ) $(ST_OBJ) $(PROJ_OBJ) $(PDEVS_RELATED_OBJ)
 ifeq ($(PLATFORM), CF2)
