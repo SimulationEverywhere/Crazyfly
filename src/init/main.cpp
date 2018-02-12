@@ -33,6 +33,7 @@ int main(){
     setLed_1();
     time_loop();
 
+    /*
     // Atomic models definition
     auto motorDEVS = make_atomic_ptr<MotorDEVS<Time, Message>>();
 
@@ -41,7 +42,7 @@ int main(){
 
     //Top I/O port definition
     // Input ports
-    //	auto sensor_in = make_port_ptr< MotionSensorPort<Time, Message>, const string &, const Time & >("port_motion_sensor", Time(0,0,1,0));
+    // autg sensor_in = make_port_ptr< MotionSensorPort<Time, Message>, const string &, const Time & >("port_motion_sensor", Time(0,0,1,0));
     auto cmd_in = make_port_ptr< CmdInputPort<Time, Message>, const string &, const Time & >("port_cmd_input", Time(0,0,0,200));
 
     // Output ports
@@ -59,15 +60,14 @@ int main(){
     Time end_time{Time(0,0,2,500)};
 
     end_time = root.runUntil(end_time);
+    */
 
-    setLed_8();
-    time_loop();
-    while (true) {
+    do {
         setLed_2();
         time_loop();
-        setLed_1();
+        setLed_8();
         time_loop();
-    }
+    } while (true);
 
     return 0;
 }

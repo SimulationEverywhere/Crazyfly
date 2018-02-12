@@ -44,10 +44,16 @@ extern int values[];
 /* INPUT PORTS DRIVERS */
 template<class TIME, class MSG>
 bool CmdInputPort<TIME, MSG>::pDriver(Value &v) const noexcept {
-    v = 0;
-    if (ali_count < 7) {
-        v = values[ali_count++];
+    if (ali_count < 10) {
+        ali_count++;
+    } else {
+        ali_count = 0;
     }
+
+    v = ali_count * 20;
+    //if (ali_count < 7) {
+        //v = values[ali_count++];
+    //}
     return true;
 }
 
