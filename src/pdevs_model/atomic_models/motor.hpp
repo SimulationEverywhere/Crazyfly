@@ -22,6 +22,15 @@ using namespace ecdboost;
 using namespace ecdboost::simulation;
 using namespace ecdboost::simulation::pdevs;
 
+extern "C" {
+    void setLed_1();
+    void setLed_2();
+    void setLed_8();
+    void time_loop();
+    void powerDistributionInit();
+    void powerStop();
+}
+
 #define MINIMUM_TIME_FOR_SWITCH TIME(00,00,0,00,100) //BRITime();
 template<class TIME, class MSG>
 class MotorDEVS: public pdevs::atomic<TIME, MSG> {
@@ -36,29 +45,31 @@ public:
      * @constructor
      * Initiales the model passivated, with the internal state equal to send to qsUpdater
      */
-    explicit MotorDEVS() noexcept
-            : atomic<TIME, MSG>("MotorDEVS"),
-			  thrust_m1(0),
-			  thrust_m2(0),
-			  thrust_m3(0),
-			  thrust_m4(0)
-	{
+    explicit MotorDEVS() noexcept :
+        atomic<TIME, MSG>("MotorDEVS"),
+        thrust_m1(0),
+        thrust_m2(0),
+        thrust_m3(0),
+        thrust_m4(0)
+    {
+        powerDistributionInit();
+        powerStop();
 
         next_internal = pdevs::atomic<TIME, MSG>::infinity;
     }
-    /**
-     * actualize the state and passivates the model
-     */
 
+    /**
+     * Update the state and passivates the model
+     */
     void internal() noexcept {
         // Do nothing
-        next_internal = Time(00,00,00,250);
+        //next_internal = Time(00,00,00,250);
+        next_internal = pdevs::atomic<TIME, MSG>::infinity;
     }
 
     /**
      * Return the next time advanced calculated in the internal function or in the external funtion
      */
-
     TIME advance() const noexcept {
 
         return next_internal;
@@ -68,9 +79,7 @@ public:
      * Calculates the output of the model.
      * @return the message with the message type updated in the external
      */
-
     vector<MSG> out() const noexcept {
-
         vector<MSG> output;
         MSG output_m1("port_motor1", thrust_m1),
             output_m2("port_motor2", thrust_m2),
@@ -87,15 +96,17 @@ public:
 
     void external(const std::vector<MSG>& mb, const TIME& t) noexcept {
 
-        assert((mb.size() == 1)); // Wrong message bag size. Should be one.
+        assert((mb.size() == 1));
         uint32_t value = mb.front().val;
-
         thrust_m1 = value;
         thrust_m2 = value;
         thrust_m3 = value;
         thrust_m4 = value;
 
-        next_internal = Time::Zero; //MINIMUM_TIME_FOR_SWITCH; //Advance time of the model;
+        setLed_8();
+        time_loop();
+
+        next_internal = Time::Zero;
     }
 
     virtual void confluence(const std::vector<MSG>& mb, const TIME& t) noexcept {

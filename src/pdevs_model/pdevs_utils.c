@@ -7,9 +7,15 @@ int ali_count = 0;
 int values[] = {37000, 43000, 45000, 43000, 45000, 43000, 37000};
 
 void time_loop() {
-    int i = 0;
-    while (i < 10000000000) {
-      i++;
+    int i, j;
+    j = 0;
+    while (j < 100) {
+	i = 0;
+	while (i < 100000) {
+	    __asm__("");
+	    i++;
+	}
+	j++;
     }
 }
 

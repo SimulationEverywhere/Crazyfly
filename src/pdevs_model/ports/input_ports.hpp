@@ -26,7 +26,7 @@ public:
     /**
      * @brief TODO
      */
-    explicit MotionSensorPort(const std::string &n, const TIME &polling) noexcept
+    explicit MotionSensorPort(const std::string &n = "port_motion_sensor", const TIME &polling = Time(0, 0, 1, 0)) noexcept
         : port<TIME, MSG>(n, polling) { }
 
     void print() noexcept {}
@@ -42,7 +42,7 @@ public:
     /**
      * @brief TODO
      */
-    explicit CmdInputPort(const std::string &n, const TIME &polling) noexcept
+    explicit CmdInputPort(const std::string &n = "port_cmd_input", const TIME &polling = Time(0, 0, 1, 0)) noexcept
         : port<TIME, MSG>(n, polling) { }
 
     void print() noexcept {}
