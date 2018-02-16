@@ -6,6 +6,8 @@ bool ledOn = false;
 int ali_count = 0;
 int values[] = {37000, 43000, 45000, 43000, 45000, 43000, 37000};
 
+int devs_activation_count[4] = {0,0,0,0};
+
 void time_loop() {
     int i, j;
     j = 0;

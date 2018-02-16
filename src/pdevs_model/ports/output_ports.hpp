@@ -33,8 +33,9 @@ public:
      *
      * @param n name assigned to the port
      */
-    explicit MotorPort(const int& _motor_num, const std::string &n) noexcept
-        : port<TIME, MSG>(n), motor_num(_motor_num) {
+    explicit MotorPort(const int& _motor_num, const std::string &n) noexcept :
+        port<TIME, MSG>(n),
+        motor_num(_motor_num) {
         // motorsInit();
     }
 

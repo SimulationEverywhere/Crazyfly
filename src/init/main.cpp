@@ -15,9 +15,13 @@ extern "C" {
     void setLed_2();
     void setLed_8();
     void time_loop();
+
+    void powerDistributionInit();
+    void powerStop();
+    void motorsSetRatio(uint32_t id, uint16_t ithrust);
 }
 
-int main(){
+void create_and_run_pdevs_model(Time until) {
     // Atomic models definition
     auto motorDEVS = make_atomic_ptr<MotorDEVS<Time, Message>>();
 
@@ -27,7 +31,7 @@ int main(){
     //Top I/O port definition
     // Input ports
     // autg sensor_in = make_port_ptr< MotionSensorPort<Time, Message>, const string &, const Time & >("port_motion_sensor", Time(0,0,1,0));
-    auto cmd_in = make_port_ptr< CmdInputPort<Time, Message>, const string &, const Time & >("port_cmd_input", Time(0,0,1,0));
+    auto cmd_in = make_port_ptr< CmdInputPort<Time, Message>, const string &, const Time & >("port_cmd_input", Time(0,0,2,0));
 
     // Output ports
     auto motor_1 = make_port_ptr<MotorPort<Time, Message>, const int&, const string &>(0, "port_motor1");
@@ -42,11 +46,38 @@ int main(){
         { {motor_1,motorDEVS}, {motor_2,motorDEVS}, {motor_3,motorDEVS}, {motor_4,motorDEVS} }
     };
 
-    setLed_2();
-    for (int i = 0; i < 6; i++ ) { time_loop(); }
-    setLed_1();
+    root.runUntil(until);
+}
 
-    root.runUntil(Time(0,0,15,0));
+void setMotors(uint16_t thrust) {
+    for (int i = 0; i < 4; i++) { motorsSetRatio(i, thrust); };
+    for (int i = 0; i < 25; i++) { time_loop(); };
+}
+
+void use_motors() {
+    powerDistributionInit();
+    powerStop();
+
+    setLed_8();
+    setMotors(60000);
+
+    setLed_2();
+    setMotors(40000);
+
+    setLed_8();
+    setMotors(20000);
+
+    setLed_2();
+    setMotors(5000);
+
+    setLed_8();
+    setMotors(0);
+}
+
+int main(){
+    //create_and_run_pdevs_model(Time(0,0,15,0));
+
+    use_motors();
 
     do {
         setLed_2();

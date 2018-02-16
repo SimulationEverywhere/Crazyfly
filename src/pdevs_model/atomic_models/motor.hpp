@@ -63,7 +63,6 @@ public:
      */
     void internal() noexcept {
         // Do nothing
-        //next_internal = Time(00,00,00,250);
         next_internal = pdevs::atomic<TIME, MSG>::infinity;
     }
 
@@ -102,9 +101,6 @@ public:
         thrust_m2 = value;
         thrust_m3 = value;
         thrust_m4 = value;
-
-        setLed_8();
-        time_loop();
 
         next_internal = Time::Zero;
     }
