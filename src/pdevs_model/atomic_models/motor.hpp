@@ -29,6 +29,7 @@ extern "C" {
     void time_loop();
     void powerDistributionInit();
     void powerStop();
+    void pmInit();
 }
 
 #define MINIMUM_TIME_FOR_SWITCH TIME(00,00,0,00,100) //BRITime();
@@ -52,8 +53,8 @@ public:
         thrust_m3(0),
         thrust_m4(0)
     {
+        pmInit();
         powerDistributionInit();
-        powerStop();
 
         next_internal = pdevs::atomic<TIME, MSG>::infinity;
     }

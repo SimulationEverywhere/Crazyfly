@@ -51,15 +51,20 @@ void create_and_run_pdevs_model(Time until) {
 
 void setMotors(uint16_t thrust) {
     for (int i = 0; i < 4; i++) { motorsSetRatio(i, thrust); };
-    for (int i = 0; i < 25; i++) { time_loop(); };
+    for (int i = 0; i < 20; i++) { time_loop(); };
 }
 
 void use_motors() {
     powerDistributionInit();
-    powerStop();
 
     setLed_8();
-    setMotors(60000);
+    setMotors(0);
+
+    setLed_2();
+    setMotors(5000);
+
+    setLed_8();
+    setMotors(20000);
 
     setLed_2();
     setMotors(40000);

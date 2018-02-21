@@ -207,6 +207,11 @@ void motorsSetRatio(uint32_t id, uint16_t ithrust)
 
     ratio = ithrust;
 
+    /*
+       PDEVS modification
+       This has been commented out because it seems to provoke that the motors
+       work in a binary way: at full speed or turned off, but not an
+       intermediate value.
   #ifdef ENABLE_THRUST_BAT_COMPENSATED
     if (motorMap[id]->drvType == BRUSHED)
     {
@@ -220,6 +225,7 @@ void motorsSetRatio(uint32_t id, uint16_t ithrust)
 
     }
   #endif
+    */
     if (motorMap[id]->drvType == BRUSHLESS)
     {
       motorMap[id]->setCompare(motorMap[id]->tim, motorsBLConv16ToBits(ratio));
