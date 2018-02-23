@@ -11,7 +11,7 @@
 #ifndef MOTOR_MASTER_H
 #define MOTOR_MASTER_H
 
-#include <memory>
+//#include <memory>
 #include <ecdboost/simulation.hpp>
 
 using namespace std;
@@ -19,69 +19,58 @@ using namespace ecdboost;
 using namespace ecdboost::simulation;
 using namespace ecdboost::simulation::pdevs;
 
-extern "C" {
-  void setLed_1();
-  void setLed_2();
-  void setLed_8();
-  void time_loop();
-  void powerDistributionInit();
-  void powerStop();
-  void pmInit();
-}
-
 template<class TIME, class MSG>
 class MotorDEVS: public pdevs::atomic<TIME, MSG> {
   private:
-    int thrust_m1, thrust_m2, thrust_m3, thrust_m4;
-    TIME next_internal;
+  int thrust_m1, thrust_m2, thrust_m3, thrust_m4;
+  TIME next_internal;
 
   public:
-    explicit MotorDEVS() noexcept :
-      atomic<TIME, MSG>("MotorDEVS"),
-      thrust_m1(0),
-      thrust_m2(0),
-      thrust_m3(0),
-      thrust_m4(0)
-    {
-      pmInit();
-      powerDistributionInit();
+  explicit MotorDEVS() noexcept :
+    atomic<TIME, MSG>("MotorDEVS"),
+    thrust_m1(0),
+    thrust_m2(0),
+    thrust_m3(0),
+    thrust_m4(0)
+  {
 
-      next_internal = pdevs::atomic<TIME, MSG>::infinity;
-    }
+    next_internal = pdevs::atomic<TIME, MSG>::infinity;
+  }
 
-    void internal() noexcept { next_internal = pdevs::atomic<TIME, MSG>::infinity; }
+  void internal() noexcept { next_internal = pdevs::atomic<TIME, MSG>::infinity; }
 
-    TIME advance() const noexcept { return next_internal; }
+  TIME advance() const noexcept { return next_internal; }
 
-    vector<MSG> out() const noexcept {
-      vector<MSG> output;
-      MSG output_m1("port_motor1", thrust_m1),
-        output_m2("port_motor2", thrust_m2),
-        output_m3("port_motor3", thrust_m3),
-        output_m4("port_motor4", thrust_m4);
+  vector<MSG> out() const noexcept {
+    vector<MSG> output;
+    MSG output_m1("port_motor1", 0),
+      output_m2("port_motor2", 0),
+      output_m3("port_motor3", 0),
+      output_m4("port_motor4", 0);
 
-      output.push_back(output_m1);
-      output.push_back(output_m2);
-      output.push_back(output_m3);
-      output.push_back(output_m4);
+    output.push_back(output_m1);
+    output.push_back(output_m2);
+    output.push_back(output_m3);
+    output.push_back(output_m4);
 
-      return output;
-    }
+    return output;
+  }
 
-    void external(const std::vector<MSG>& mb, const TIME& t) noexcept {
-      uint32_t value = mb.front().val;
-      thrust_m1 = value;
-      thrust_m2 = value;
-      thrust_m3 = value;
-      thrust_m4 = value;
-      next_internal = TIME::Zero;
-    }
+  void external(const std::vector<MSG>& mb, const TIME& t) noexcept {
+    uint32_t value = mb.front().val;
+    thrust_m1 = value;
+    thrust_m2 = value;
+    thrust_m3 = value;
+    thrust_m4 = value;
 
-    virtual void confluence(const std::vector<MSG>& mb, const TIME& t) noexcept {
-      internal();
-    }
+    next_internal = TIME::Zero;
+  }
 
-    void print() noexcept {}
+  virtual void confluence(const std::vector<MSG>& mb, const TIME& t) noexcept {
+    internal();
+  }
+
+  void print() noexcept {}
 
 };
 
