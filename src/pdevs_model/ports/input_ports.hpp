@@ -17,36 +17,30 @@ using namespace std;
 using namespace ecdboost::simulation;
 using namespace ecdboost::simulation::pdevs;
 
+using Value = int;
 
 template<class TIME, class MSG>
 class MotionSensorPort: public port<TIME, MSG> {
+    public:
+        explicit MotionSensorPort(const std::string &name, const TIME &polling) noexcept
+            : port<TIME, MSG>(name, polling) { }
 
-public:
-    using Value = int;
-    /**
-     * @brief TODO
-     */
-    explicit MotionSensorPort(const std::string &n = "port_motion_sensor", const TIME &polling = Time(0, 0, 1, 0)) noexcept
-        : port<TIME, MSG>(n, polling) { }
-
-    void print() noexcept {}
-    bool pDriver(Value &v) const noexcept;
+        void print() noexcept {}
+        bool pDriver(Value &v) const noexcept;
 };
 
 
 template<class TIME, class MSG>
 class CmdInputPort: public port<TIME, MSG> {
+    public:
+        explicit CmdInputPort(const std::string &name, const TIME &polling) noexcept
+            : port<TIME, MSG>(name, polling) { }
 
-public:
-    using Value = int;
-    /**
-     * @brief TODO
-     */
-    explicit CmdInputPort(const std::string &n = "port_cmd_input", const TIME &polling = Time(0, 0, 1, 0)) noexcept
-        : port<TIME, MSG>(n, polling) { }
+        void print() noexcept {}
+        bool pDriver(Value &v) const noexcept;
 
-    void print() noexcept {}
-    bool pDriver(Value &v) const noexcept;
+    private:
+        mutable int interaction_counter;
 };
 
 

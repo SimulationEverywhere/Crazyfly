@@ -17,11 +17,6 @@ extern "C" {
     void motorsSetRatio(uint32_t id, uint16_t ithrust);
 }
 
-extern int ali_count;
-extern int devs_activation_count[4];
-
-#include <motors.h>
-
 #include <ecdboost/simulation.hpp>
 
 #include "ports/input_ports.hpp"
@@ -37,8 +32,11 @@ using Value = int;
 /* INPUT PORTS DRIVERS */
 template<class TIME, class MSG>
 bool CmdInputPort<TIME, MSG>::pDriver(Value &v) const noexcept {
-    v = ali_count;
-    ali_count = (ali_count + 1) % 4;
+    v = interaction_counter;
+    interaction_counter = (interaction_counter + 1) % 4;
+
+    if (interaction_counter == 1) setLed_2();
+    else setLed_8();
 
     return true;
 }
@@ -51,30 +49,10 @@ bool MotionSensorPort<TIME, MSG>::pDriver(Value &v) const noexcept {
 /* OUTPUT PORTS DRIVERS */
 template<class TIME, class MSG>
 bool MotorPort<TIME, MSG>::pDriver(Value& v) const noexcept {
-    uint16_t val = 0;
     int selected_motor = v;
 
-    if (motor_num == 0) {
-        if (selected_motor == 0) { setLed_2(); }
-        if (selected_motor == 1) { setLed_8(); }
-    }
-
-    if (motor_num != selected_motor) {
-        switch (motor_num) {
-            case 0:
-                val = 12000;
-                break;
-            case 1:
-                val = 27000;
-                break;
-            case 2:
-                val = 47000;
-                break;
-            case 3:
-                val = 60000;
-                break;
-        }
-    }
+    uint16_t val = 40000;
+    //if (motor_num != selected_motor) val = 25000;
 
     motorsSetRatio(motor_num, val);
 

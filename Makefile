@@ -118,6 +118,7 @@ PDEVS_MODEL_DIR = src/pdevs_model
 # ECDBoost
 VPATH += $(LIB)
 VPATH += $(LIB)/ecdboost/utilities
+VPATH += $(LIB)/ecdboost/builtins
 
 VPATH += $(PDEVS_MODEL_DIR)
 
@@ -209,7 +210,7 @@ PROJ_OBJ_CF2 += sleepus.o
 # Libs
 PROJ_OBJ_CF2 += libarm_math.a
 
-PDEVS_RELATED_OBJ = pdevs_utils.o eTime.o hwTime.o  # PDEVS object files
+PDEVS_RELATED_OBJ = pdevs_utils.o CF2_timer.o  # PDEVS object files
 
 OBJ = $(FREERTOS_OBJ) $(PORT_OBJ) $(ST_OBJ) $(PROJ_OBJ) $(PDEVS_RELATED_OBJ)
 ifeq ($(PLATFORM), CF2)
@@ -235,8 +236,9 @@ INCLUDES += -Isrc/utils/interface -Isrc/drivers/interface -Isrc/platform
 INCLUDES += -Ivendor/CMSIS/CMSIS/Include -Isrc/drivers/bosch/interface
 
 INCLUDES += -I$(BOOST_LIB_DIR)
-INCLUDES += -I$(LIB)  # including ECDBoost library
+INCLUDES += -I$(LIB)                     # including ECDBoost library
 INCLUDES += -I$(LIB)/ecdboost/utilities  # including ecdboost utilities
+INCLUDES += -I$(LIB)/ecdboost/builtins   # including ecdboost builtins
 INCLUDES += -I$(PDEVS_MODEL_DIR)
 
 

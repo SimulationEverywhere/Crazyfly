@@ -28,14 +28,11 @@ CC_COMMAND_SILENT="  CC    $@"
 	@$(if $(QUIET), ,echo $(CC_COMMAND$(VERBOSE)) )
 	@$(CC_COMMAND)
 
-###########
-# Modified for PDEVS-crazyflie-firmware
 CPP_COMMAND=$(CPP) $(CPPFLAGS) -g -c -std=c++11 $< -o $(BIN)/$@
 CPP_COMMAND_SILENT="  CPP    $@"
 .cpp.o: 
 	@$(if $(QUIET), ,echo $(CPP_COMMAND$(VERBOSE)) )
 	@$(CPP_COMMAND)
-###########
 
 CCS_COMMAND=$(CC) $(CSFLAGS) -c $< -o $(BIN)/$@
 CCS_COMMAND_SILENT="  CCS   $@"
