@@ -24,7 +24,14 @@ public:
   void print() noexcept {}
 
   bool pDriver(Value &thrust) const noexcept {
-    led_blocking_assert(5000 < thrust && thrust <= 62000);
+    if (!(0 <= thrust && thrust <= 62000)){
+      set_led_GL();
+      time_loop();
+      set_led_GR();
+      time_loop();
+    }
+
+    led_blocking_assert(0 <= thrust && thrust <= 62000);
 
     motorsSetRatio(motor_num, (uint16_t) thrust);
     return true;

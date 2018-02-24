@@ -5,6 +5,7 @@
 
 #include "CF2_timer.hpp"
 #include "atomic_models/motor.hpp"
+#include "atomic_models/open_loop_controller.hpp"
 #include "ports/command_input_port.hpp"
 #include "ports/motor_port.hpp"
 
@@ -29,7 +30,26 @@ extern "C" {
   void motorsSetRatio(uint32_t id, uint16_t ithrust);
 }
 
-void create_and_run_pdevs_model(Time until) {
+void open_loop_model(Time until) {
+  auto open_loop = make_atomic_ptr<OpenLoopController<Time, Message>>();
+
+  shared_ptr<flattened_coupled<Time, Message>> ControlUnit( new flattened_coupled<Time, Message>{{open_loop}, {open_loop}, {}, {open_loop}});
+
+  auto motor_1 = make_port_ptr< MotorPort< Time, Message >, const string &, const int& >("motor_1", 0);
+  auto motor_2 = make_port_ptr< MotorPort< Time, Message >, const string &, const int& >("motor_2", 1);
+  auto motor_3 = make_port_ptr< MotorPort< Time, Message >, const string &, const int& >("motor_3", 2);
+  auto motor_4 = make_port_ptr< MotorPort< Time, Message >, const string &, const int& >("motor_4", 3);
+
+  erunner<Time, Message> root{
+    ControlUnit,
+    {  },
+    { {motor_1, open_loop}, {motor_2, open_loop}, {motor_3, open_loop}, {motor_4, open_loop} }
+  };
+
+  root.runUntil(until);
+}
+
+void basic_model(Time until) {
   // Atomic models definition
   auto motorDEVS = make_atomic_ptr<MotorDEVS<Time, Message>>();
 
@@ -90,7 +110,8 @@ int main(){
   pmInit();
   powerDistributionInit();
   
-  create_and_run_pdevs_model(Time(0,0,15,0));
+  open_loop_model(Time(0,0,15,0));
+  //basic_model(Time(0,0,15,0));
   //use_motors();
 
   do {

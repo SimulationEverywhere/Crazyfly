@@ -34,8 +34,6 @@ POWER_DISTRIBUTION ?= stock
 SENSORS 					 ?= cf2
 
 ######### Test activation ##########
-FATFS_DISKIO_TESTS  ?= 0	# Set to 1 to enable FatFS diskio function tests. Erases card.
-
 ifeq ($(PLATFORM), CF2)
 OPENOCD_TARGET    ?= target/stm32f4x_stlink.cfg
 USE_FPU           ?= 1
@@ -98,10 +96,6 @@ FREERTOS_OBJ = list.o tasks.o queue.o timers.o $(MEMMANG_OBJ)
 #FatFS
 VPATH_CF2 += $(LIB)/FatFS
 FATFS_OBJ  = diskio.o ff.o syscall.o unicode.o fatfs_sd.o
-ifeq ($(FATFS_DISKIO_TESTS), 1)
-FATFS_OBJ += diskio_function_tests.o
-CFLAGS += -DUSD_RUN_DISKIO_FUNCTION_TESTS
-endif
 
 # Crazyflie sources
 VPATH += src/init src/hal/src src/modules/src src/utils/src src/drivers/bosch/src src/drivers/src
@@ -203,7 +197,7 @@ PROJ_OBJ_CF2 += exptest.o
 
 # Utilities
 PROJ_OBJ += filter.o cpuid.o cfassert.o  eprintf.o crc.o num.o debug.o
-PROJ_OBJ += version.o FreeRTOS-openocd.o
+PROJ_OBJ += FreeRTOS-openocd.o
 PROJ_OBJ_CF2 += configblockeeprom.o crc_bosch.o
 PROJ_OBJ_CF2 += sleepus.o
 
@@ -363,31 +357,14 @@ endif
 
 
 all: check_dependencies build
-build: clean_version compile print_version size
-compile: clean_version $(PROG).hex $(PROG).bin $(PROG).dfu
+build: compile size
+compile: $(PROG).hex $(PROG).bin $(PROG).dfu
 
 libarm_math.a:
 	+$(MAKE) -C tools/make/cmsis_dsp/ V=$(V)
 
-clean_version:
-ifeq ($(SHELL),/bin/sh)
-	@echo "  CLEAN_VERSION"
-	@rm -f version.c
-endif
-
-print_version: compile
-ifeq ($(PLATFORM), CF2)
-	@echo "Crazyflie 2.0 build!"
-endif
-	@$(PYTHON2) tools/make/versionTemplate.py --print-version
-ifeq ($(CLOAD), 1)
-	@echo "Crazyloader build!"
-endif
-ifeq ($(FATFS_DISKIO_TESTS), 1)
-	@echo "WARNING: FatFS diskio tests enabled. Erases SD-card!"
-endif
-
 size: compile
+	echo ""
 	@$(SIZE) -B $(PROG).elf
 
 #Radio bootloader
@@ -431,7 +408,7 @@ prep:
 
 check_dependencies: check_submodules
 ifeq (,$(wildcard boost_reference.mk))
-	$(error The reference to the boost library is needed. Create it following the instructions in README.md)
+	$(error The reference to the boost library is needed. Create it by following the instructions in README.md)
 endif
 
 check_submodules:
