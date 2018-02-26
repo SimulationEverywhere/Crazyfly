@@ -10,9 +10,7 @@
 #include "ports/motor_port.hpp"
 
 using namespace std;
-using namespace ecdboost::simulation;
-using namespace ecdboost::simulation::pdevs;
-using namespace ecdboost::simulation::pdevs::basic_models;
+using namespace ecdboost;
 
 using Time = EmbeddedTime<CF2Timer>;
 using Message = EmbeddedMessage<Time>;
@@ -123,3 +121,4 @@ int main(){
 
   return 0;
 }
+

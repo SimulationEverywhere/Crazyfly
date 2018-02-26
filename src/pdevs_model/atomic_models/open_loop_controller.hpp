@@ -5,8 +5,6 @@
 
 using namespace std;
 using namespace ecdboost;
-using namespace ecdboost::simulation;
-using namespace ecdboost::simulation::pdevs;
 
 enum stage { waiting, starting, taking_off, flying, landing, stopped };
 
@@ -20,7 +18,7 @@ extern "C" {
 }
 
 template<class TIME, class MSG>
-class OpenLoopController: public pdevs::atomic<TIME, MSG> {
+class OpenLoopController : public ecdboost::atomic<TIME, MSG> {
   private:
     mutable int thrust;
     mutable stage current_stage;

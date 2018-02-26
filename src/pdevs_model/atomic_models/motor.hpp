@@ -15,11 +15,9 @@
 
 using namespace std;
 using namespace ecdboost;
-using namespace ecdboost::simulation;
-using namespace ecdboost::simulation::pdevs;
 
 template<class TIME, class MSG>
-class MotorDEVS: public pdevs::atomic<TIME, MSG> {
+class MotorDEVS: public ecdboost::atomic<TIME, MSG> {
   private:
   int thrust_m1, thrust_m2, thrust_m3, thrust_m4;
   TIME next_internal;
@@ -33,10 +31,10 @@ class MotorDEVS: public pdevs::atomic<TIME, MSG> {
     thrust_m4(0)
   {
 
-    next_internal = pdevs::atomic<TIME, MSG>::infinity;
+    next_internal = TIME::Infinity;
   }
 
-  void internal() noexcept { next_internal = pdevs::atomic<TIME, MSG>::infinity; }
+  void internal() noexcept { next_internal = TIME::Infinity; }
 
   TIME advance() const noexcept { return next_internal; }
 
@@ -55,7 +53,7 @@ class MotorDEVS: public pdevs::atomic<TIME, MSG> {
     return output;
   }
 
-  void external(const std::vector<MSG>& mb, const TIME& t) noexcept {
+  void external(const vector<MSG>& mb, const TIME& t) noexcept {
     uint32_t value = mb.front().val;
     thrust_m1 = value;
     thrust_m2 = value;
@@ -65,7 +63,7 @@ class MotorDEVS: public pdevs::atomic<TIME, MSG> {
     next_internal = TIME::Zero;
   }
 
-  virtual void confluence(const std::vector<MSG>& mb, const TIME& t) noexcept {
+  virtual void confluence(const vector<MSG>& mb, const TIME& t) noexcept {
     internal();
   }
 

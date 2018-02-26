@@ -1,13 +1,13 @@
 #include <ecdboost/simulation.hpp>
 
 using namespace std;
-using namespace ecdboost::simulation;
-using namespace ecdboost::simulation::pdevs;
+using namespace ecdboost;
 
 extern "C" {
   void set_led_GR();
   void set_led_RR();
 }
+
 using Value = int;
 
 template<class TIME, class MSG>
@@ -27,7 +27,7 @@ class CommandInputPort: public port<TIME, MSG> {
       return true;
     }
 
-  private:
+  protected:
     mutable int interaction_counter;
 };
 

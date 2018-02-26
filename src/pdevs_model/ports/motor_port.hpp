@@ -1,8 +1,7 @@
 #include <ecdboost/simulation.hpp>
 
 using namespace std;
-using namespace ecdboost::simulation;
-using namespace ecdboost::simulation::pdevs;
+using namespace ecdboost;
 
 using Value = int;
 
@@ -13,28 +12,21 @@ extern "C" {
 
 template<class TIME, class MSG>
 class MotorPort: public port<TIME, MSG> {
+  public:
+    explicit MotorPort(const std::string &name, const int& _motor_num) noexcept :
+      port<TIME, MSG>(name),
+      motor_num(_motor_num) { }
 
-public:
-  const int motor_num;
+    void print() noexcept {}
 
-  explicit MotorPort(const std::string &name, const int& _motor_num) noexcept :
-    port<TIME, MSG>(name),
-    motor_num(_motor_num) { }
+    bool pDriver(Value &thrust) const noexcept {
+      led_blocking_assert(0 <= thrust && thrust <= 62000);
 
-  void print() noexcept {}
-
-  bool pDriver(Value &thrust) const noexcept {
-    if (!(0 <= thrust && thrust <= 62000)){
-      set_led_GL();
-      time_loop();
-      set_led_GR();
-      time_loop();
+      motorsSetRatio(motor_num, (uint16_t) thrust);
+      return true;
     }
 
-    led_blocking_assert(0 <= thrust && thrust <= 62000);
-
-    motorsSetRatio(motor_num, (uint16_t) thrust);
-    return true;
-  }
+  protected:
+    const int motor_num;
 };
 
