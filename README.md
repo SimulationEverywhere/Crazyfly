@@ -17,43 +17,55 @@ The original project has been modified in the following way:
 - `src/lib/ecdboost/`: Contains the ECDBoost library (which is itself a git submodule).
 - `docs/`: Contains some relevant documentation and old material.
 
-## Dependencies
+## Dependencies & Installation
 
-### Boost library
+### Git Submodules
 
-ECDBoost has the [Boost C++ Library](http://www.boost.org/) as a dependency.
-You need to install it on your computer and then tell `g++` where to look for it.
+This project uses git submodules to deal with some dependencies.  
 
+#### Cloning
+
+To correctly clone the project with submodules, clone with the `--recursive` flag:
+```bash
+git clone --recursive https://github.com/SimulationEverywhere/PDEVS-crazyflie-firmware
+```
+
+If you already have cloned the repo (without the `--recursive` flag), use:
+```bash
+git submodule init
+git submodule update
+```
+
+#### Updating submodules changes
+
+To update submodules use:
+```bash
+git submodule foreach git pull origin master
+```
+
+### Toolchain
+
+The compilation uses `gcc-arm-none-eabi`.
+Below in the original Crazyflie README you can find instructions for installation of this package or for usage of a virtual machine that already has the needed packages.
+
+### Boost Library
+
+Bear in mind that [https://github.com/simulationeverywhere/ecdboost](ECDBoost) has [Boost C++ Library](http://www.boost.org/) as a dependency (version 1.57.0 has been being used but you are welcome to test other verions aswell).  
+After installation you need to let `g++` know where this dependecy is placed.
 To do this, after installation create a file called `boost_reference.mk` (in the root of the project) with the following content
 ```
 BOOST_LIB_DIR = <path_to_boost_library>
 ```
+This file will be read by the Makefile.
 
 For example
 ```
 BOOST_LIB_DIR = ../boost_1_57_0
 ```
 
-### Toolchain
+## Usage
 
-The compilation uses `gcc-arm-none-eabi`.
-Below you can find instructions for installation of this package or for usage of a virtual machine that already has the needed packages.
-
-### Cloning
-
-This repository uses git submodules, in particular one of which is ECDBoost.  
-Clone with the `--recursive` flag:
-```bash
-git clone --recursive https://github.com/SimulationEverywhere/PDEVS-crazyflie-firmware
-```
-
-If you already have cloned the repo, use:
-```bash
-git submodule init
-git submodule update
-```
-
-### Compilation and flashing into the quadcopter
+### Compilation
 
 If needed:
 ```bash
@@ -65,20 +77,13 @@ Compile with:
 make
 ```
 
-Connect the Crazyradio.  
-Set the quadcopter in bootloader mode.  
-Flash binaries with:
-```bash
-make cload
-```
+### Flashing into the quadcopter
 
-More details can be found below and in the crazyflie documentation.
+The only needed file to flash the firmware is the `cf2.bin` binary file.
+Flashing is done as explained in the Crazyflie documentation.
 
-## Possible future steps
-
-- Understand and merge previous PDEVS model of the crazyflie
-- Understand how to use ECDBoost to simulate the model
-- Implement the model ports' pDrive function
+If you are working from the virtual machine, keep in mind that flashing directly from it has not been proven to be a trustworthy method.
+Instead, flashing has been working correctly when done directly from the host machine using the [Crazyflie client](https://www.bitcraze.io/getting-started-with-the-crazyflie-2-0/#update-fw) and the Crazyradio
 
 ## Modified Makefile
 
