@@ -50,7 +50,7 @@ Below in the original Crazyflie README you can find instructions for installatio
 
 ### Boost Library
 
-Bear in mind that [https://github.com/simulationeverywhere/ecdboost](ECDBoost) has [Boost C++ Library](http://www.boost.org/) as a dependency (version 1.57.0 has been being used but you are welcome to test other verions aswell).  
+Bear in mind that [ECDBoost](https://github.com/simulationeverywhere/ecdboost) has [Boost C++ Library](http://www.boost.org/) as a dependency (version 1.57.0 has been being used but you are welcome to test other verions aswell).  
 After installation you need to let `g++` know where this dependecy is placed.
 To do this, after installation create a file called `boost_reference.mk` (in the root of the project) with the following content
 ```
@@ -82,8 +82,8 @@ make
 The only needed file to flash the firmware is the `cf2.bin` binary file.
 Flashing is done as explained in the Crazyflie documentation.
 
-If you are working from the virtual machine, keep in mind that flashing directly from it has not been proven to be a trustworthy method.
-Instead, flashing has been working correctly when done directly from the host machine using the [Crazyflie client](https://www.bitcraze.io/getting-started-with-the-crazyflie-2-0/#update-fw) and the Crazyradio
+If you are working from the virtual machine, keep in mind that flashing directly from it has not been proven to be a reliable method.
+Instead, flashing has been working correctly when done directly from the host machine using the [Crazyflie client](https://www.bitcraze.io/getting-started-with-the-crazyflie-2-0/#update-fw) and the Crazyradio.
 
 ## Modified Makefile
 
