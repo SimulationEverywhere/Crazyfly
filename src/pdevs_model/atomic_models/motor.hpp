@@ -40,10 +40,10 @@ class MotorDEVS: public ecdboost::atomic<TIME, MSG> {
 
   vector<MSG> out() const noexcept {
     vector<MSG> output;
-    MSG output_m1("port_motor1", 10000),
-        output_m2("port_motor2", 30000),
-        output_m3("port_motor3", 10000),
-        output_m4("port_motor4", 30000);
+    MSG output_m1("port_motor1", 5000),
+        output_m2("port_motor2", 35000),
+        output_m3("port_motor3", 5000),
+        output_m4("port_motor4", 35000);
 
     output.push_back(output_m1);
     output.push_back(output_m2);

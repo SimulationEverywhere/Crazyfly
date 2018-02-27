@@ -17,7 +17,7 @@ class CommandInputPort: public port<TIME, MSG> {
       : port<TIME, MSG>(name, polling) { }
 
     void print() noexcept {}
-    bool pDriver(Value &v) const noexcept {
+    bool pDriver(typename port<TIME, MSG>::MSG_VALUE &v) const noexcept {
       v = interaction_counter;
       interaction_counter = (interaction_counter + 1) % 4;
 

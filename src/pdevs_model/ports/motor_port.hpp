@@ -3,7 +3,6 @@
 using namespace std;
 using namespace ecdboost;
 
-using Value = int;
 
 extern "C" {
   void led_blocking_assert(bool);
@@ -19,7 +18,7 @@ class MotorPort: public port<TIME, MSG> {
 
     void print() noexcept {}
 
-    bool pDriver(Value &thrust) const noexcept {
+    bool pDriver(typename port<TIME, MSG>::MSG_VALUE &thrust) const noexcept {
       led_blocking_assert(0 <= thrust && thrust <= 62000);
 
       motorsSetRatio(motor_num, (uint16_t) thrust);

@@ -13,7 +13,7 @@ using namespace std;
 using namespace ecdboost;
 
 using Time = EmbeddedTime<CF2Timer>;
-using Message = EmbeddedMessage<Time>;
+using Message = EmbeddedMessage<Time, int>;
 
 extern "C" {
   void set_led_GR();
@@ -108,8 +108,8 @@ int main(){
   pmInit();
   powerDistributionInit();
   
-  open_loop_model(Time(0,0,15,0));
-  //basic_model(Time(0,0,15,0));
+  //open_loop_model(Time(0,0,15,0));
+  basic_model(Time(0,0,15,0));
   //use_motors();
 
   do {
