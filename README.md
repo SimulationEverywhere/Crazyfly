@@ -87,8 +87,8 @@ using Timer = CF2Timer;
 
 #endif
 
-#include "CF2_timer.hpp"
-#include "ports/motor_port.hpp"
+using Time = EmbeddedTime<Timer>;
+using Message = EmbeddedMessage<Time, int>;
 ```
 
 ### Simulation
