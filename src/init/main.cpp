@@ -16,12 +16,14 @@ using namespace ecdboost;
 #include <ecdboost/builtins/linux_timer.hpp>
 #include <ecdboost/builtins/output_logger_port.hpp>
 
-using Time = EmbeddedTime<LinuxTimer>;
+using Timer = LinuxTimer;
 
 #else
 
 #include "CF2_timer.hpp"
 #include "ports/motor_port.hpp"
+
+using Timer = CF2Timer;
 
 extern "C" {
   void set_led_GR();
@@ -36,10 +38,9 @@ extern "C" {
   void motorsSetRatio(uint32_t id, uint16_t ithrust);
 }
 
-using Time = EmbeddedTime<CF2Timer>;
-
 #endif
 
+using Time = EmbeddedTime<Timer>;
 using Message = EmbeddedMessage<Time, int>;
 
 void open_loop_model(Time until) {

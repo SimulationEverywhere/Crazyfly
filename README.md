@@ -53,17 +53,55 @@ Below in the original Crazyflie README you can find instructions for installatio
 Bear in mind that [ECDBoost](https://github.com/simulationeverywhere/ecdboost) has [Boost C++ Library](http://www.boost.org/) as a dependency (version 1.57.0 has been being used but you are welcome to test other verions aswell).  
 After installation you need to let `g++` know where this dependecy is placed.
 To do this, after installation create a file called `boost_reference.mk` (in the root of the project) with the following content
-```
+```bash
 BOOST_LIB_DIR = <path_to_boost_library>
 ```
 This file will be read by the Makefile.
 
 For example
-```
+```bash
 BOOST_LIB_DIR = ../boost_1_57_0
 ```
 
 ## Usage
+
+The developed PDEVS models should be both simulable and embeddable.
+To be able to do this while still reusing most of the codebase, g++ precompilation macros are used.
+More precisely, when building for simulation the `ENABLE_SIMULATION` macro is passed to the compiler.
+This allows different behaviour in the project, depending on wether we wish to simulate or to embedded the model.
+
+For example, the following code snippet allows to decide which Timer object to use for ECDBoost:
+```c++
+#ifdef ENABLE_SIMULATION
+
+#include <ecdboost/builtins/linux_timer.hpp>
+
+using Timer = LinuxTimer;
+
+#else
+
+#include "CF2_timer.hpp"
+
+using Timer = CF2Timer;
+
+
+#endif
+
+#include "CF2_timer.hpp"
+#include "ports/motor_port.hpp"
+```
+
+### Simulation
+
+To build the binary for simulation `simulation.bin` use:
+```bash
+make simulation
+```
+
+And then run the simulation with:
+```bash
+./simulation.bin
+```
 
 ### Compilation
 
