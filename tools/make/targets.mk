@@ -46,7 +46,7 @@ clean_o: clean_version
 	$(foreach o,$(OBJ),$(BIN)/$(o))
 
 clean:
-	rm -f cf*.elf cf*.hex cf*.bin cf*.dfu cf*.map $(BIN)/dep/*.d $(BIN)/*.o
+	rm -f cf*.elf cf*.hex cf*.bin cf*.dfu cf*.map $(BIN)/dep/*.d $(BIN)/*.o input_for_motor_ports.txt simulation.bin
 
 mrproper: clean
 	rm -f *~ hal/src/*~ hal/interface/*~ tasks/src/*~ tasks/inc/*~ utils/src/*~ utils/inc/*~ tools/make/*~; rm -rf bin/dep/*.d $(BIN)/*.a $(BIN)/vendor/*.o

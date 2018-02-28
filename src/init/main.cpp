@@ -1,19 +1,27 @@
+#include <iostream>
 // PDEVS
 #include <ecdboost/simulation.hpp>
 #include <ecdboost/utilities/embedded_time.hpp>
 #include <ecdboost/utilities/embedded_message.hpp>
 
-#include "CF2_timer.hpp"
 #include "atomic_models/motor.hpp"
 #include "atomic_models/open_loop_controller.hpp"
 #include "ports/command_input_port.hpp"
-#include "ports/motor_port.hpp"
 
 using namespace std;
 using namespace ecdboost;
 
-using Time = EmbeddedTime<CF2Timer>;
-using Message = EmbeddedMessage<Time, int>;
+#ifdef ENABLE_SIMULATION
+
+#include <ecdboost/builtins/linux_timer.hpp>
+#include <ecdboost/builtins/output_logger_port.hpp>
+
+using Time = EmbeddedTime<LinuxTimer>;
+
+#else
+
+#include "CF2_timer.hpp"
+#include "ports/motor_port.hpp"
 
 extern "C" {
   void set_led_GR();
@@ -28,15 +36,32 @@ extern "C" {
   void motorsSetRatio(uint32_t id, uint16_t ithrust);
 }
 
+using Time = EmbeddedTime<CF2Timer>;
+
+#endif
+
+using Message = EmbeddedMessage<Time, int>;
+
 void open_loop_model(Time until) {
   auto open_loop = make_atomic_ptr<OpenLoopController<Time, Message>>();
 
   shared_ptr<flattened_coupled<Time, Message>> ControlUnit( new flattened_coupled<Time, Message>{{open_loop}, {open_loop}, {}, {open_loop}});
 
+  #ifdef ENABLE_SIMULATION
+  // Only one can be chosen
+  //std::ostream &log_stream = std::cout;
+  std::ofstream log_stream; log_stream.open("input_for_motor_ports.txt");
+
+  auto motor_1 = make_port_ptr< OutputLoggerPort< Time, Message >, const string &, std::ostream& >("motor_1", log_stream);
+  auto motor_2 = make_port_ptr< OutputLoggerPort< Time, Message >, const string &, std::ostream& >("motor_2", log_stream);
+  auto motor_3 = make_port_ptr< OutputLoggerPort< Time, Message >, const string &, std::ostream& >("motor_3", log_stream);
+  auto motor_4 = make_port_ptr< OutputLoggerPort< Time, Message >, const string &, std::ostream& >("motor_4", log_stream);
+  #else
   auto motor_1 = make_port_ptr< MotorPort< Time, Message >, const string &, const int& >("motor_1", 0);
   auto motor_2 = make_port_ptr< MotorPort< Time, Message >, const string &, const int& >("motor_2", 1);
   auto motor_3 = make_port_ptr< MotorPort< Time, Message >, const string &, const int& >("motor_3", 2);
   auto motor_4 = make_port_ptr< MotorPort< Time, Message >, const string &, const int& >("motor_4", 3);
+  #endif
 
   erunner<Time, Message> root{
     ControlUnit,
@@ -59,10 +84,21 @@ void basic_model(Time until) {
   auto cmd_in = make_port_ptr< CommandInputPort< Time, Message >, const string &, const Time & >("port_cmd_input", Time(0,0,1,0));
 
   // Output ports
+  #ifdef ENABLE_SIMULATION
+  // Only one can be chosen
+  std::ostream &log_stream = std::cout;
+  //std::ofstream log_stream; log_stream.open("input_for_motor_ports.txt");
+
+  auto motor_1 = make_port_ptr< OutputLoggerPort< Time, Message >, const string &, std::ostream& >("motor_1", log_stream);
+  auto motor_2 = make_port_ptr< OutputLoggerPort< Time, Message >, const string &, std::ostream& >("motor_2", log_stream);
+  auto motor_3 = make_port_ptr< OutputLoggerPort< Time, Message >, const string &, std::ostream& >("motor_3", log_stream);
+  auto motor_4 = make_port_ptr< OutputLoggerPort< Time, Message >, const string &, std::ostream& >("motor_4", log_stream);
+  #else
   auto motor_1 = make_port_ptr< MotorPort< Time, Message >, const string &, const int& >("port_motor1", 0);
   auto motor_2 = make_port_ptr< MotorPort< Time, Message >, const string &, const int& >("port_motor2", 1);
   auto motor_3 = make_port_ptr< MotorPort< Time, Message >, const string &, const int& >("port_motor3", 2);
   auto motor_4 = make_port_ptr< MotorPort< Time, Message >, const string &, const int& >("port_motor4", 3);
+  #endif
 
   // Execution parameter definition
   erunner<Time, Message> root{
@@ -75,12 +111,15 @@ void basic_model(Time until) {
 }
 
 void setMotors(uint16_t thrust) {
+  #ifndef ENABLE_SIMULATION
   for (int i = 0; i < 4; i++) { motorsSetRatio(i, thrust); };
   Time ts = Time::currentTime();
   while ((Time::currentTime() - ts) < Time(0,0,2,0)) {}
+  #endif
 }
 
 void use_motors() {
+  #ifndef ENABLE_SIMULATION
   set_led_RR();
   setMotors(0);
 
@@ -101,23 +140,29 @@ void use_motors() {
 
   set_led_RR();
   setMotors(0);
+  #endif
 }
 
-int main(){
+int main() {
+  #ifndef ENABLE_SIMULATION
   ledInit();
   pmInit();
   powerDistributionInit();
+  #endif
   
-  //open_loop_model(Time(0,0,15,0));
-  basic_model(Time(0,0,15,0));
+  Time until(0,0,15,0);
+  open_loop_model(until);
+  //basic_model(until);
   //use_motors();
 
+  #ifndef ENABLE_SIMULATION
   do {
     set_led_GR();
     time_loop();
     set_led_GL();
     time_loop();
   } while (true);
+  #endif
 
   return 0;
 }

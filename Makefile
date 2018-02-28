@@ -229,11 +229,12 @@ INCLUDES += -Isrc/config -Isrc/hal/interface -Isrc/modules/interface
 INCLUDES += -Isrc/utils/interface -Isrc/drivers/interface -Isrc/platform
 INCLUDES += -Ivendor/CMSIS/CMSIS/Include -Isrc/drivers/bosch/interface
 
-INCLUDES += -I$(BOOST_LIB_DIR)
-INCLUDES += -I$(LIB)                     # including ECDBoost library
-INCLUDES += -I$(LIB)/ecdboost/utilities  # including ecdboost utilities
-INCLUDES += -I$(LIB)/ecdboost/builtins   # including ecdboost builtins
-INCLUDES += -I$(PDEVS_MODEL_DIR)
+PDEVS_INCLUDES = -I$(BOOST_LIB_DIR)
+PDEVS_INCLUDES += -I$(LIB)                     # including ECDBoost library
+PDEVS_INCLUDES += -I$(LIB)/ecdboost/utilities  # including ecdboost utilities
+PDEVS_INCLUDES += -I$(LIB)/ecdboost/builtins   # including ecdboost builtins
+PDEVS_INCLUDES += -I$(PDEVS_MODEL_DIR)
+INCLUDES += $(PDEVS_INCLUDES)  # This is reused for the simulation target
 
 
 INCLUDES_CF2 += -I$(LIB)/STM32F4xx_StdPeriph_Driver/inc
@@ -359,6 +360,15 @@ endif
 all: check_dependencies build
 build: compile size
 compile: $(PROG).hex $(PROG).bin $(PROG).dfu
+
+## Exclusive for simulation
+DEFINES = -DENABLE_SIMULATION
+CPP_FILES = src/init/main.cpp $(LIB)/ecdboost/builtins/linux_timer.cpp
+
+simulation:
+	g++ $(DEFINES) $(PDEVS_INCLUDES) -fpermissive -std=c++11 $(CPP_FILES) -o simulation.bin
+
+##
 
 libarm_math.a:
 	+$(MAKE) -C tools/make/cmsis_dsp/ V=$(V)
